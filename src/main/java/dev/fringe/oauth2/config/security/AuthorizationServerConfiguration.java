@@ -14,17 +14,18 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
+	public static String CLIENT = "test";
+	public static String SECRET = "test";
+	
 	@Autowired TokenStore tokenStore;
-	
 	@Autowired UserApprovalHandler userApprovalHandler;
-	
-	@Autowired  AuthenticationManager authenticationManagerBean;
-	
+	@Autowired AuthenticationManager authenticationManagerBean;
+
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		endpoints.tokenStore(tokenStore).userApprovalHandler(userApprovalHandler).authenticationManager(authenticationManagerBean);
 	}
-	
+
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory().withClient("test").authorities("ROLE_CLIENT").scopes("trust").secret("test");
+		clients.inMemory().withClient(CLIENT).authorities("ROLE_CLIENT").scopes("trust").secret(SECRET);
 	}
 }

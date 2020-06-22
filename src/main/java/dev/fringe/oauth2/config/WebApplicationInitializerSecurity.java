@@ -1,4 +1,4 @@
-package dev.fringe.oauth2.config.security;
+package dev.fringe.oauth2.config;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
