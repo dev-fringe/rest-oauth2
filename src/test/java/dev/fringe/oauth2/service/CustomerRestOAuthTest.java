@@ -27,10 +27,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import dev.fringe.oauth2.model.Customer;
 import dev.fringe.oauth2.service.support.ApiRestLoggingRequestInterceptor;
+import lombok.extern.log4j.Log4j2;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = CustomerRestOAuthTest.class)
 @TestMethodOrder(OrderAnnotation.class)
+@Log4j2
 public class CustomerRestOAuthTest {
 
 	@Value("${api.client.id:test}")
@@ -71,9 +73,9 @@ public class CustomerRestOAuthTest {
 	@Test
 	public void test() {
 		Customer customer = new Customer("k", "d", "kd@g.com", 0L);
-		System.out.println(oAuth2RestTemplate.postForObject("http://localhost:8080/rest-oauth2/customers", customer,Customer.class));
+		log.info("customer = " + oAuth2RestTemplate.postForObject("http://localhost:8080/rest-oauth2/customers", customer,Customer.class));
 		ResponseEntity<List<Customer>> custList = oAuth2RestTemplate.exchange("http://localhost:8080/rest-oauth2/customers", HttpMethod.GET, null,new ParameterizedTypeReference<List<Customer>>() {});
-		System.out.println(custList.getBody());
+		log.info("customers = " + custList.getBody());
 	}
 
 }
