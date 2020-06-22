@@ -28,52 +28,51 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import dev.fringe.oauth2.model.Customer;
 import dev.fringe.oauth2.service.support.ApiRestLoggingRequestInterceptor;
 
-
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = CustomerRestOAuthTest.class)
 @TestMethodOrder(OrderAnnotation.class)
 public class CustomerRestOAuthTest {
-	
-    @Value("${api.client.id:test}")
-    private String clientId;
 
-    @Value("${api.secret:test}")
-    private String secret;
+	@Value("${api.client.id:test}")
+	private String clientId;
 
-    @Value("${api.access.token.uri:http://localhost:8080/rest-oauth2/oauth/token}")
-    private String accessTokenUri;
+	@Value("${api.secret:test}")
+	private String secret;
 
-    @Value("${api.username:bob}")
-    private String username;
+	@Value("${api.access.token.uri:http://localhost:8080/rest-oauth2/oauth/token}")
+	private String accessTokenUri;
 
-    @Value("${api.password:abc123}")
-    private String password;
-    
+	@Value("${api.username:bob}")
+	private String username;
 
-    @Bean(name = "oAuth2RestTemplate")
-    public OAuth2RestTemplate oAuth2RestTemplate() {
+	@Value("${api.password:abc123}")
+	private String password;
+
+	@Bean(name = "oAuth2RestTemplate")
+	public OAuth2RestTemplate oAuth2RestTemplate() {
 		ResourceOwnerPasswordAccessTokenProvider provider = new ResourceOwnerPasswordAccessTokenProvider();
-	    ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
-	    resource.setAccessTokenUri(accessTokenUri);
-	    resource.setClientId(clientId);
-	    resource.setClientSecret(secret);
-	    resource.setUsername(username);
-	    resource.setPassword(password);
-	    OAuth2AccessToken accessToken = provider.obtainAccessToken(resource, new DefaultAccessTokenRequest());
-	    OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext(accessToken));
-        List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>(1);
-        interceptors.add(new ApiRestLoggingRequestInterceptor());
-        restTemplate.setRequestFactory(new InterceptingClientHttpRequestFactory(new HttpComponentsClientHttpRequestFactory(),interceptors));
-        return restTemplate;
-    }
-    
-    @Autowired OAuth2RestTemplate oAuth2RestTemplate;
-    
+		ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
+		resource.setAccessTokenUri(accessTokenUri);
+		resource.setClientId(clientId);
+		resource.setClientSecret(secret);
+		resource.setUsername(username);
+		resource.setPassword(password);
+		OAuth2AccessToken accessToken = provider.obtainAccessToken(resource, new DefaultAccessTokenRequest());
+		OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext(accessToken));
+		List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>(1);
+		interceptors.add(new ApiRestLoggingRequestInterceptor());
+		restTemplate.setRequestFactory(new InterceptingClientHttpRequestFactory(new HttpComponentsClientHttpRequestFactory(), interceptors));
+		return restTemplate;
+	}
+
+	@Autowired
+	OAuth2RestTemplate oAuth2RestTemplate;
+
 	@Test
 	public void test() {
-	    Customer customer = new Customer("k", "d", "kd@g.com", 0L);
-	    System.out.println(oAuth2RestTemplate.postForObject("http://localhost:8080/rest-oauth2/customers", customer, Customer.class));
-		ResponseEntity<List<Customer>> custList = oAuth2RestTemplate.exchange("http://localhost:8080/rest-oauth2/customers", HttpMethod.GET, null, new ParameterizedTypeReference<List<Customer>>(){});
+		Customer customer = new Customer("k", "d", "kd@g.com", 0L);
+		System.out.println(oAuth2RestTemplate.postForObject("http://localhost:8080/rest-oauth2/customers", customer,Customer.class));
+		ResponseEntity<List<Customer>> custList = oAuth2RestTemplate.exchange("http://localhost:8080/rest-oauth2/customers", HttpMethod.GET, null,new ParameterizedTypeReference<List<Customer>>() {});
 		System.out.println(custList.getBody());
 	}
 
