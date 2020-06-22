@@ -16,7 +16,6 @@ public class WebSecurityOAuth2Configuration extends WebSecurityConfigurerAdapter
 		return super.authenticationManagerBean();
 	}
 
-	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.inMemoryAuthentication().withUser("bill").password("abc123").roles("ADMIN").and().withUser("bob").password("abc123").roles("USER");
 	}
