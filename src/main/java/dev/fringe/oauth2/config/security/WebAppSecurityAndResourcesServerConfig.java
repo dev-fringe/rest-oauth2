@@ -18,7 +18,7 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 @Configuration
 @EnableResourceServer
 public class WebAppSecurityAndResourcesServerConfig extends ResourceServerConfigurerAdapter {
-	
+
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/customers/**").access("hasRole('USER')");
 	}
@@ -26,30 +26,29 @@ public class WebAppSecurityAndResourcesServerConfig extends ResourceServerConfig
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
 		resources.resourceId("api").stateless(false);
 	}
-	
+
 	@Autowired
 	private ClientDetailsService clientDetailsService;
-	
+
 	@Bean
-	public TokenStore tokenStore(){
+	public TokenStore tokenStore() {
 		return new InMemoryTokenStore();
 	}
-	
+
 	@Bean
-    public TokenStoreUserApprovalHandler userApprovalHandler(TokenStore tokenStore){
-        TokenStoreUserApprovalHandler handler = new TokenStoreUserApprovalHandler();
-        handler.setTokenStore(tokenStore);
-        handler.setRequestFactory(new DefaultOAuth2RequestFactory(clientDetailsService));
-        handler.setClientDetailsService(clientDetailsService);
-        return handler;
-    }
-     
-    @Bean
-    public ApprovalStore approvalStore(TokenStore tokenStore) throws Exception {
-        TokenApprovalStore store = new TokenApprovalStore();
-        store.setTokenStore(tokenStore);
-        return store;
-    }
-    
+	public TokenStoreUserApprovalHandler userApprovalHandler(TokenStore tokenStore) {
+		TokenStoreUserApprovalHandler handler = new TokenStoreUserApprovalHandler();
+		handler.setTokenStore(tokenStore);
+		handler.setRequestFactory(new DefaultOAuth2RequestFactory(clientDetailsService));
+		handler.setClientDetailsService(clientDetailsService);
+		return handler;
+	}
+
+	@Bean
+	public ApprovalStore approvalStore(TokenStore tokenStore) throws Exception {
+		TokenApprovalStore store = new TokenApprovalStore();
+		store.setTokenStore(tokenStore);
+		return store;
+	}
 
 }
