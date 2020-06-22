@@ -23,7 +23,7 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import dev.fringe.oauth2.config.security.AuthorizationServerConfiguration;
+import dev.fringe.oauth2.config.security.AuthorizationServer;
 import dev.fringe.oauth2.model.Customer;
 import dev.fringe.oauth2.service.support.ApiRestLoggingRequestInterceptor;
 import lombok.extern.log4j.Log4j2;
@@ -47,8 +47,8 @@ public class CustomerRestOAuthTest {
 	public OAuth2RestTemplate oAuth2RestTemplate() {
 		ResourceOwnerPasswordAccessTokenProvider provider = new ResourceOwnerPasswordAccessTokenProvider();
 		ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
-		resource.setClientId(AuthorizationServerConfiguration.CLIENT);
-		resource.setClientSecret(AuthorizationServerConfiguration.SECRET);
+		resource.setClientId(AuthorizationServer.CLIENT);
+		resource.setClientSecret(AuthorizationServer.SECRET);
 		resource.setAccessTokenUri(accessTokenUri);
 		resource.setUsername(username);
 		resource.setPassword(password);

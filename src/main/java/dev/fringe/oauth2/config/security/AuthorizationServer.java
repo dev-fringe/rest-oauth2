@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 
 @Configuration
 @EnableAuthorizationServer
-public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
 	public static String CLIENT = "test";
 	public static String SECRET = "test";
@@ -25,6 +25,9 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 		endpoints.tokenStore(tokenStore).userApprovalHandler(userApprovalHandler).authenticationManager(authenticationManagerBean);
 	}
 
+	/**
+	 * customize need
+	 */
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory().withClient(CLIENT).authorities("ROLE_CLIENT").scopes("trust").secret(SECRET);
 	}

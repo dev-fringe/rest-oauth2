@@ -9,14 +9,17 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityOAuth2Configuration extends WebSecurityConfigurerAdapter {
+public class AuthenticationManagerBuilderConfig extends WebSecurityConfigurerAdapter {
 
+//    @Autowired UserSSOService userService;
+    
 	@Bean
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
 
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//		 auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder());
 		auth.inMemoryAuthentication().withUser("bill").password("abc123").roles("ADMIN").and().withUser("bob").password("abc123").roles("USER");
 	}
 }
