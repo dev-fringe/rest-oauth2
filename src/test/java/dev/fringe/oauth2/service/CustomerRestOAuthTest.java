@@ -20,6 +20,7 @@ import org.springframework.security.oauth2.client.token.DefaultAccessTokenReques
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.client.RestTemplate;
 
 import dev.fringe.oauth2.config.OAuth2Config;
 import dev.fringe.oauth2.model.Customer;
@@ -47,7 +48,7 @@ public class CustomerRestOAuthTest {
 		restTemplate.setRequestFactory(new InterceptingClientHttpRequestFactory(new HttpComponentsClientHttpRequestFactory(), Arrays.asList(new ApiRestLoggingRequestInterceptor())));
 		return restTemplate;
 	}
-	
+    
     protected OAuth2RestTemplate oAuth2RestTemplateByUsernameAndPassword(String username, String password) {
         ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
 		resource.setClientId(OAuth2Config.CLIENT);
@@ -60,13 +61,13 @@ public class CustomerRestOAuthTest {
         return restTemplate;
     }
     
-	@Autowired OAuth2RestTemplate oAuth2RestTemplate;
+	@Autowired RestTemplate restTemplate;
 
 	@Test
 	public void test() {
-	    oAuth2RestTemplate = this.oAuth2RestTemplateByUsernameAndPassword("bob","abc123");
-		log.info("customer = " + oAuth2RestTemplate.postForObject("http://localhost:8080/rest-oauth2/customers", new Customer("k", "d", "kd@g.com", 0L),Customer.class));
-		log.info("customers = " + oAuth2RestTemplate.exchange("http://localhost:8080/rest-oauth2/customers", HttpMethod.GET, null,new ParameterizedTypeReference<List<Customer>>() {}).getBody());
+		restTemplate = this.oAuth2RestTemplateByUsernameAndPassword("bob","abc123");
+		log.info("customer = " + restTemplate.postForObject("http://localhost:8080/rest-oauth2/customers", new Customer("k", "d", "kd@g.com", 0L),Customer.class));
+		log.info("customers = " + restTemplate.exchange("http://localhost:8080/rest-oauth2/customers", HttpMethod.GET, null,new ParameterizedTypeReference<List<Customer>>() {}).getBody());
 	}
 
 }
