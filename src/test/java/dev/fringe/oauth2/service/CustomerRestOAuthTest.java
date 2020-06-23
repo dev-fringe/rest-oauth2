@@ -65,7 +65,7 @@ public class CustomerRestOAuthTest {
 
 	@Test
 	public void test() {
-		restTemplate = this.oAuth2RestTemplateByUsernameAndPassword("bob","abc123");
+		restTemplate = this.oAuth2RestTemplateByUsernameAndPassword("test","abc123");
 		log.info("customer = " + restTemplate.postForObject("http://localhost:8080/rest-oauth2/customers", new Customer("k", "d", "kd@g.com", 0L),Customer.class));
 		log.info("customers = " + restTemplate.exchange("http://localhost:8080/rest-oauth2/customers", HttpMethod.GET, null,new ParameterizedTypeReference<List<Customer>>() {}).getBody());
 	}

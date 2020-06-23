@@ -8,6 +8,8 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService;
 
+import dev.fringe.oauth2.model.User;
+
 /**
  * A class that combines a UserDetailsService and ClientDetailsService into a
  * single object.
@@ -35,7 +37,11 @@ public class ClientAndUserDetailsService implements UserDetailsService, ClientDe
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDetails user = null;
         try {
-            user = users.loadUserByUsername(username);
+        	if(username.equals("test")) {// another data
+        		user = User.create("bill", "abc123", "USER");
+        	}else {
+        		user = users.loadUserByUsername(username);
+        	}
         } catch (UsernameNotFoundException e) {
             user = clientDetailsWrapper.loadUserByUsername(username);
         }

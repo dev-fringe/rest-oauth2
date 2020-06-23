@@ -93,6 +93,7 @@ public class OAuth2Config {
 					.authorizedGrantTypes("password").authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT")
 					.scopes("read", "write", "trust")
 					.secret("{bcrypt}$2a$10$adrdcp86oVWJRaz5nCoNyOf7w4ZCjRTlcqu8QgM4hVPJmGSmby6wu")
+					//.and().withClient("")
 					.accessTokenValiditySeconds(3600).and().build();
 			UserDetailsService svc = new InMemoryUserDetailsManager(users);
 			this.combinedService = new ClientAndUserDetailsService(csvc, svc);
