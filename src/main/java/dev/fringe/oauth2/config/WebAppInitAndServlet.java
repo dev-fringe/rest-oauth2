@@ -9,11 +9,11 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "dev.fringe.oauth2")
-public class WebApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class WebAppInitAndServlet extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class[] {WebApplicationInitializer.class, OAuth2SecurityConfiguration.class};
+		return new Class[] {WebAppInitAndServlet.class, OAuth2Config.class};
 	}
 
 	@Override

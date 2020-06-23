@@ -31,7 +31,7 @@ import dev.fringe.oauth2.model.User;
 import dev.fringe.oauth2.service.ClientAndUserDetailsService;
 
 @Configuration
-public class OAuth2SecurityConfiguration {
+public class OAuth2Config {
 
 	public static final String CLIENT = "test";
 	public static final String SECRET = "{bcrypt}$2a$10$adrdcp86oVWJRaz5nCoNyOf7w4ZCjRTlcqu8QgM4hVPJmGSmby6wu";

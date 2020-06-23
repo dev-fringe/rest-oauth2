@@ -1,20 +1,16 @@
 package dev.fringe.oauth2.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Customer {
 	
-	private String firstName;
-	private String lastName;
-	private String email;
+	private String firstName,lastName,email;
 	private Long id;
 	
-	public Customer(){
-	}
-	
 	public Customer(String firstName, String lastName, String email, Long id) {
-		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;

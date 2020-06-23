@@ -11,24 +11,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User implements UserDetails {
 
     private static final long serialVersionUID = -5592668947749607490L;
 
-    public static UserDetails create(String username, String password, String... authorities) {
-        return new User(username, password, authorities);
-    }
-
-    private final String username;
-    private final String password;
-    private final Collection<GrantedAuthority> authorities;
+    private String username;
+    private String password;
+    private Collection<GrantedAuthority> authorities;
 
     @SuppressWarnings("unchecked")
-    private User(String username, String password) {
+	private User(String username, String password) {
         this(username, password, Collections.EMPTY_LIST);
+    }
+    
+    public static UserDetails create(String username, String password, String... authorities) {
+    	return new User(username, password, authorities);
     }
 
     private User(String username, String password, String... authorities) {
