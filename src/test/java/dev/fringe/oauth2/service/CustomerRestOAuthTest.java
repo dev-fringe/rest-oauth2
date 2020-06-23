@@ -47,11 +47,6 @@ public class CustomerRestOAuthTest {
 		resource.setUsername(username);
 		resource.setPassword(password);
 		OAuth2AccessToken accessToken = provider.obtainAccessToken(resource, new DefaultAccessTokenRequest());
-//		String accessTokenAsString = accessToken.getValue();
-		log.info(accessToken.getScope());
-		log.info(accessToken.getTokenType());
-		log.info(accessToken.getAdditionalInformation());
-
 		OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext(accessToken));
 		restTemplate.setRequestFactory(new InterceptingClientHttpRequestFactory(new HttpComponentsClientHttpRequestFactory(), Arrays.asList(new ApiRestLoggingRequestInterceptor())));
 		return restTemplate;
