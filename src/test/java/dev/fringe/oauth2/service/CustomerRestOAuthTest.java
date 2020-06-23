@@ -23,7 +23,7 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import dev.fringe.oauth2.config.security.AuthorizationServer;
+import dev.fringe.oauth2.config.OAuth2SecurityConfiguration;
 import dev.fringe.oauth2.model.Customer;
 import dev.fringe.oauth2.service.support.ApiRestLoggingRequestInterceptor;
 import lombok.extern.log4j.Log4j2;
@@ -37,22 +37,27 @@ public class CustomerRestOAuthTest {
 	@Value("${api.access.token.uri:http://localhost:8080/rest-oauth2/oauth/token}")
 	private String accessTokenUri;
 
-	@Value("${api.username:bob}")
+	@Value("${api.username:sophia}")
 	private String username;
 
-	@Value("${api.password:abc123}")
+	@Value("${api.password:three}")
 	private String password;
 
 	@Bean(name = "oAuth2RestTemplate")
 	public OAuth2RestTemplate oAuth2RestTemplate() {
 		ResourceOwnerPasswordAccessTokenProvider provider = new ResourceOwnerPasswordAccessTokenProvider();
 		ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
-		resource.setClientId(AuthorizationServer.CLIENT);
-		resource.setClientSecret(AuthorizationServer.SECRET);
+		resource.setClientId(OAuth2SecurityConfiguration.CLIENT);
+		resource.setClientSecret(OAuth2SecurityConfiguration.SECRET);
 		resource.setAccessTokenUri(accessTokenUri);
 		resource.setUsername(username);
 		resource.setPassword(password);
 		OAuth2AccessToken accessToken = provider.obtainAccessToken(resource, new DefaultAccessTokenRequest());
+//		String accessTokenAsString = accessToken.getValue();
+		log.info(accessToken.getScope());
+		log.info(accessToken.getTokenType());
+		log.info(accessToken.getAdditionalInformation());
+
 		OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext(accessToken));
 		restTemplate.setRequestFactory(new InterceptingClientHttpRequestFactory(new HttpComponentsClientHttpRequestFactory(), Arrays.asList(new ApiRestLoggingRequestInterceptor())));
 		return restTemplate;

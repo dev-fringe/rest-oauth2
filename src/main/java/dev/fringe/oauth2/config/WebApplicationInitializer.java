@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import dev.fringe.oauth2.config.security.ResourceOwner;
-import dev.fringe.oauth2.config.security.UserAgent;
 
 @Configuration
 @EnableWebMvc
@@ -15,7 +13,7 @@ public class WebApplicationInitializer extends AbstractAnnotationConfigDispatche
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class[] {WebApplicationInitializer.class, ResourceOwner.class, UserAgent.class};
+		return new Class[] {WebApplicationInitializer.class, OAuth2SecurityConfiguration.class};
 	}
 
 	@Override

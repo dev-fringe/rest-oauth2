@@ -1,26 +1,58 @@
 package dev.fringe.oauth2.model;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
 
-public class User extends org.springframework.security.core.userdetails.User {
-	
-	private static final long serialVersionUID = 8777447718328694727L;
-	private String lastname;
 
-	public User(String username, String password, boolean enabled, boolean accountNonExpired,
-			boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities,
-			String lastname) {
-		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
-		this.lastname = lastname;
-	}
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-	public User(String username, String password, Collection<? extends GrantedAuthority> authorities, String lastname) {
-		this(username, password, true, true, true, true, authorities, lastname);
-	}
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class User implements UserDetails {
 
-	public String getLastname() {
-		return lastname;
-	}
+    private static final long serialVersionUID = -5592668947749607490L;
+
+    public static UserDetails create(String username, String password, String... authorities) {
+        return new User(username, password, authorities);
+    }
+
+    private final String username;
+    private final String password;
+    private final Collection<GrantedAuthority> authorities;
+
+    @SuppressWarnings("unchecked")
+    private User(String username, String password) {
+        this(username, password, Collections.EMPTY_LIST);
+    }
+
+    private User(String username, String password, String... authorities) {
+        this(username, password, AuthorityUtils.createAuthorityList(authorities));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
 }
