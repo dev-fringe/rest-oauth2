@@ -84,10 +84,15 @@ public class OAuth2SecurityConfiguration {
 
 		private ClientAndUserDetailsService combinedService;
 
-		private final List<UserDetails> users = Arrays.asList(User.create("bill", "abc123", "USER"), User.create("bob", "abc123", "USER"), User.create("sophia", "three", "NONE"), User.create("olivia", "four", "USER"));
+		private final List<UserDetails> users = Arrays.asList(User.create("bill", "abc123", "USER"),
+				User.create("bob", "abc123", "USER"), User.create("sophia", "three", "NONE"),
+				User.create("olivia", "four", "USER"));
 
 		public AuthorizationServer() throws Exception {
-			ClientDetailsService csvc = new InMemoryClientDetailsServiceBuilder().withClient(CLIENT).authorizedGrantTypes("password").authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT").scopes("read", "write", "trust").secret("{bcrypt}$2a$10$adrdcp86oVWJRaz5nCoNyOf7w4ZCjRTlcqu8QgM4hVPJmGSmby6wu")
+			ClientDetailsService csvc = new InMemoryClientDetailsServiceBuilder().withClient(CLIENT)
+					.authorizedGrantTypes("password").authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT")
+					.scopes("read", "write", "trust")
+					.secret("{bcrypt}$2a$10$adrdcp86oVWJRaz5nCoNyOf7w4ZCjRTlcqu8QgM4hVPJmGSmby6wu")
 					.accessTokenValiditySeconds(3600).and().build();
 			UserDetailsService svc = new InMemoryUserDetailsManager(users);
 			this.combinedService = new ClientAndUserDetailsService(csvc, svc);
