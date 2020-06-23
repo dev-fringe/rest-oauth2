@@ -2,6 +2,7 @@ package dev.fringe.oauth2.config;
 
 import java.util.Arrays;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.builders.InMemoryClientDetailsServiceBuilder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -31,7 +34,7 @@ import dev.fringe.oauth2.service.ClientAndUserDetailsService;
 public class OAuth2SecurityConfiguration {
 
 	public static final String CLIENT = "test";
-	public static final String SECRET = "test";
+	public static final String SECRET = "{bcrypt}$2a$10$adrdcp86oVWJRaz5nCoNyOf7w4ZCjRTlcqu8QgM4hVPJmGSmby6wu";
 
 	@Configuration
 	@EnableWebSecurity
@@ -65,6 +68,16 @@ public class OAuth2SecurityConfiguration {
     @Order(Ordered.LOWEST_PRECEDENCE - 100)
 	public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
+		@Bean
+		public ClientDetailsService clientDetailsService() throws Exception {
+			return combinedService;
+		}
+		
+		@Bean
+		public UserDetailsService userDetailsService() {
+			return combinedService;
+		}
+		
 		@Autowired AuthenticationManager authenticationManagerBean;
 		
         private ClientAndUserDetailsService combinedService;
@@ -72,21 +85,12 @@ public class OAuth2SecurityConfiguration {
         private final List<UserDetails> users = Arrays.asList(User.create("bill", "abc123", "USER"),User.create("bob", "abc123", "USER"),User.create("sophia", "three", "NONE"),User.create("olivia", "four", "USER"));
         
 		public AuthorizationServer() throws Exception {
-            ClientDetailsService csvc = new InMemoryClientDetailsServiceBuilder().withClient(CLIENT).authorizedGrantTypes("password").authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT").scopes("read", "write", "trust").secret(SECRET).accessTokenValiditySeconds(3600).and().build();
+            ClientDetailsService csvc = new InMemoryClientDetailsServiceBuilder().withClient(CLIENT).authorizedGrantTypes("password").
+            		authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT").scopes("read", "write", "trust").secret("{bcrypt}$2a$10$adrdcp86oVWJRaz5nCoNyOf7w4ZCjRTlcqu8QgM4hVPJmGSmby6wu").accessTokenValiditySeconds(3600).and().build();
             UserDetailsService svc = new InMemoryUserDetailsManager(users);
             this.combinedService = new ClientAndUserDetailsService(csvc, svc);
 		}
 
-        @Bean
-        public ClientDetailsService clientDetailsService() throws Exception {
-            return combinedService;
-        }
-
-        @Bean
-        public UserDetailsService userDetailsService() {
-            return combinedService;
-        }
-        
 		public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 			endpoints.authenticationManager(authenticationManagerBean);
 		}
@@ -96,4 +100,8 @@ public class OAuth2SecurityConfiguration {
         }
 	}
 
+	public static void main(String[] args) {
+		final PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		System.out.println(encoder.encode("Passw@rd"));
+	}
 }

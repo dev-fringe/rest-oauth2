@@ -34,17 +34,11 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class CustomerRestOAuthTest {
 
-	@Value("${api.access.token.uri:http://localhost:8080/rest-oauth2/oauth/token}")
-	private String accessTokenUri;
+	@Value("${api.access.token.uri:http://localhost:8080/rest-oauth2/oauth/token}") private String accessTokenUri;
+	@Value("${api.username:sophia}") private String username;
+	@Value("${api.password:three}") private String password;
 
-	@Value("${api.username:sophia}")
-	private String username;
-
-	@Value("${api.password:three}")
-	private String password;
-
-	@Bean(name = "oAuth2RestTemplate")
-	public OAuth2RestTemplate oAuth2RestTemplate() {
+	@Bean(name = "oAuth2RestTemplate") public OAuth2RestTemplate oAuth2RestTemplate() {
 		ResourceOwnerPasswordAccessTokenProvider provider = new ResourceOwnerPasswordAccessTokenProvider();
 		ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
 		resource.setClientId(OAuth2SecurityConfiguration.CLIENT);
@@ -63,8 +57,7 @@ public class CustomerRestOAuthTest {
 		return restTemplate;
 	}
 
-	@Autowired
-	OAuth2RestTemplate oAuth2RestTemplate;
+	@Autowired OAuth2RestTemplate oAuth2RestTemplate;
 
 	@Test
 	public void test() {

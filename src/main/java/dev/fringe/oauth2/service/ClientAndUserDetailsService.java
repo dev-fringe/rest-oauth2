@@ -29,6 +29,8 @@ public class ClientAndUserDetailsService implements UserDetailsService, ClientDe
     }
 
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
+    	System.out.println(clients.loadClientByClientId(clientId).getAuthorities());
+    	System.out.println(clients.loadClientByClientId(clientId).getAuthorizedGrantTypes());
         return clients.loadClientByClientId(clientId);
     }
 
